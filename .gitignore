@@ -1,0 +1,9 @@
+# Ignora la cartella del tuo ambiente virtuale
+django_env/
+
+# Ignora la cartella delle impostazioni di VS Code
+.vscode/
+
+# Ignora i file compilati Python
+__pycache__/
+*.pyc
