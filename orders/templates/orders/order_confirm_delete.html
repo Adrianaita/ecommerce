@@ -1,0 +1,8 @@
+<h2>Conferma eliminazione ordine #{{ object.id }}</h2>
+<p>Sei sicuro di voler eliminare questo ordine?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Sì, elimina</button>
+    <a href="{% url 'orders:dettaglio_ordine' object.id %}">Annulla</a>
+</form>

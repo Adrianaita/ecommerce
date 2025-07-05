@@ -1,0 +1,118 @@
+{% extends 'store/main.html' %}
+{% block content %}
+<div class="container mt-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'store' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'orders:dashboard' %}">Management</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'orders:lista_ordini' %}">Ordini</a></li>
+            <li class="breadcrumb-item active">Ordine #{{ ordine.id }}</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="bg-primary text-white p-3 mb-4 rounded">
+        <h2 class="m-0">Ordine Cliente: {% if ordine.customer %}
+            {{ ordine.customer.name }}
+            {% else %}
+            Anonimo
+            {% endif %}
+        </h2>
+    </div>
+
+    <!-- Informazioni Cliente -->
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="m-0">Informazioni Cliente</h5>
+        </div>
+        <div class="card-body">
+            {% if ordine.customer %}
+            <p><strong>Nome:</strong> {{ ordine.customer.name }}</p>
+            <p><strong>Email:</strong> {{ ordine.customer.email }}</p>
+            {% else %}
+            <p>Cliente anonimo</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Indirizzo Spedizione -->
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="m-0">Indirizzo di Spedizione</h5>
+        </div>
+        <div class="card-body">
+            {% if ordine.shippingaddress_set.exists %}
+            {% with address=ordine.shippingaddress_set.first %}
+            <p><strong>Indirizzo:</strong> {{ address.address }}</p>
+            <p><strong>Città:</strong> {{ address.city }}</p>
+            <p><strong>Provincia:</strong> {{ address.state }}</p>
+            <p><strong>CAP:</strong> {{ address.zipcode }}</p>
+            {% endwith %}
+            {% else %}
+            <p>Nessun indirizzo di spedizione disponibile.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Dettaglio Ordine -->
+    <div class="card mb-4 border-primary">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="m-0">Ordine #{{ ordine.id }}</h5>
+            <div>
+                <span class="badge {% if ordine.complete %}bg-success{% else %}bg-warning text-dark{% endif %}">
+                    {% if ordine.complete %}Completato{% else %}In attesa{% endif %}
+                </span>
+                <span class="ms-2">{{ ordine.date_ordered|date:"d-m-Y H:i" }}</span>
+            </div>
+        </div>
+        <div class="card-body">
+            <h6>Totale: €{{ ordine.get_cart_total|floatformat:2 }}</h6>
+            <p>Articoli: {{ ordine.get_cart_items }}</p>
+
+            <!-- Tabella Prodotti -->
+            <table class="table">
+                <thead class="table-light">
+                    <tr>
+                        <th>Prodotto</th>
+                        <th>Immagine</th>
+                        <th>Quantità</th>
+                        <th>Prezzo</th>
+                        <th>Totale</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in ordine.orderitem_set.all %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>
+                            {% if item.product.imageURL %}
+                            <img src="{{ item.product.imageURL }}" width="50" height="50" class="img-thumbnail" />
+                            {% else %}
+                            <span class="text-muted">Nessuna immagine</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ item.quantity }}</td>
+                        <td>€{{ item.product.price|floatformat:2 }}</td>
+                        <td>€{{ item.get_total|floatformat:2 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if not ordine.complete %}
+            <form method="post" action="{% url 'orders:cambia_stato_ordine' ordine.id %}" class="mt-3">
+
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">Segna come Completato</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Link Torna alla lista -->
+    <div class="mb-4">
+        <a href="{% url 'orders:lista_ordini' %}" class="btn btn-primary">← Torna alla Lista Ordini</a>
+    </div>
+</div>
+{% endblock %}

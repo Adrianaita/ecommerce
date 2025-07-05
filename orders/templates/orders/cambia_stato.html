@@ -1,0 +1,9 @@
+<h2>Cambia stato ordine #{{ ordine.id }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Salva</button>
+</form>
+
+<a href="{% url 'orders:dettaglio_ordine' ordine.id %}">Annulla</a>

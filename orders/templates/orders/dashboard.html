@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Dashboard Ordini</h1>
+
+<p>Totale ordini: {{ totale }}</p>
+<p>Ordini completati: {{ completati }}</p>
+
+<h3>Ordini recenti:</h3>
+<ul>
+    {% for o in recenti %}
+    <li>
+        <a href="{% url 'orders:dettaglio_ordine' o.id %}">#{{ o.id }}</a> - {{ o.date_ordered|date:"d/m/Y H:i" }}
+    </li>
+    {% empty %}
+    <li>Nessun ordine recente.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
