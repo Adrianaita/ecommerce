@@ -1,1 +1,1 @@
-web: gunicorn --workers 3 --timeout 120 ecommerce.wsgi:application
+web: gunicorn --workers 4 --timeout 120 ecommerce.wsgi:application
