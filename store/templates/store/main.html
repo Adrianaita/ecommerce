@@ -90,16 +90,16 @@
     </nav>
 
     <div class="container">
-        <img src="{% static 'images/Racchetta_-1.jpg' %}" alt="Racchetta" class="thumbnail">
-        <img src="{% statc 'images/Racchetta_-1.5.jpg' %}" alt="Racchetta" class="thumbnail">
-        <img src="{% static 'images/Racchetta_-2.jpg' %}" alt="Racchetta" class="thumbnail">
-        <img src="{% static 'images/Racchetta_-3.jpg' %}" alt="Racchetta" class="thumbnail">
-        <img src="{% static 'images/Racchetta_-4.jpg' %}" alt="Racchetta" class="thumbnail">
-        <img src="{% static 'images/Racchetta_-7.jpg' %}" alt="Racchetta" class="thumbnail">
-        <img src="{% static 'images/Racchetta_-8.5.jpg' %}" alt="Racchetta" class="thumbnail">
+
+
 
         <br />
-        {% block content %} {% endblock content %}
+
+        {% block content %}
+        <img src="{% static 'images/Racchetta_-1.jpg' %}" alt="Racchetta" class="thumbnail">
+        <img src="{% static 'images/Racchetta_-1.jpg' %}" alt="Racchetta" class="thumbnail">
+
+        {% endblock content %}
     </div>
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
